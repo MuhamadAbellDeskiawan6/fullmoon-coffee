@@ -10,7 +10,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $orders = Order::with('menu')->latest()->get();
+        $orders = Order::paginate(10);
         return view('admin.dashboard', compact('orders'));
     }
 

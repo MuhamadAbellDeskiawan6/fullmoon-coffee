@@ -47,7 +47,20 @@
                     <td class="py-2 px-4">
                         <a href="https://wa.me/{{ $order->no_whatsapp }}?text=Halo%20{{ urlencode($order->nama_pemesan) }},%20terima%20kasih%20atas%20pemesanan%20kopi%20Fullmoon%20anda." target="_blank" class="bg-green-500 text-white px-3 py-1 rounded">Chat WA</a>
                     </td>
-                    <td class="py-2 px-4">{{ ucfirst($order->status) }}</td>
+                    <td class="py-2 px-4">
+                        @php
+                        $statusColors = [
+                        'pending' => 'text-yellow-600',
+                        'approved' => 'text-blue-600',
+                        'done' => 'text-green-600',
+                        'rejected' => 'text-red-600',
+                        ];
+                        @endphp
+                        <span class="{{ $statusColors[$order->status] ?? 'text-gray-800' }}">
+                            {{ ucfirst($order->status) }}
+                        </span>
+                    </td>
+
                     <td class="py-2 px-4">
                         <form action="/admin/order/{{ $order->id }}/status" method="POST" class="inline-block">
                             @csrf
@@ -55,7 +68,9 @@
                                 <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending</option>
                                 <option value="approved" {{ $order->status == 'approved' ? 'selected' : '' }}>Approved</option>
                                 <option value="done" {{ $order->status == 'done' ? 'selected' : '' }}>Done</option>
+                                <option value="rejected" {{ $order->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
                             </select>
+
                             <button type="submit" class="ml-2 bg-[#BDB5A4] text-white px-3 py-1 rounded">Update</button>
                         </form>
                     </td>
@@ -63,6 +78,10 @@
                 @endforeach
             </tbody>
         </table>
+        <!-- Pagination links -->
+        <div class="mt-6">
+            {{ $orders->links('pagination::tailwind') }}
+        </div>
 
         <div class="mt-8">
             <a href="/admin/menus" class="bg-[#BDB5A4] text-white px-4 py-2 rounded">Kelola Menu</a>

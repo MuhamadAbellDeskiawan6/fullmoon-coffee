@@ -11,8 +11,8 @@ class DashboardController extends Controller
     public function index()
     {
         // Ambil semua orders
-        $orders = Order::with('menu')->latest()->get();
-
+        $orders = Order::orderBy('created_at', 'desc')->paginate(10);
         return view('admin.dashboard', compact('orders'));
+        
     }
 }

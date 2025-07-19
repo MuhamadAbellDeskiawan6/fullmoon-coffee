@@ -34,11 +34,11 @@
                 @csrf
                 <div>
                     <label class="block text-sm font-semibold mb-1">Nama Lengkap</label>
-                    <input type="text" name="nama_pemesan" class="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#BDB5A4]" required>
+                    <input type="text" name="nama_pemesan" required class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-[#BDB5A4]">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold mb-1">Pilih Menu Kopi</label>
-                    <select name="menu_id" class="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#BDB5A4]" required>
+                    <select name="menu_id" required class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-[#BDB5A4]">
                         @foreach($menus as $menu)
                         <option value="{{ $menu->id }}">{{ $menu->nama }}</option>
                         @endforeach
@@ -46,23 +46,15 @@
                 </div>
                 <div>
                     <label class="block text-sm font-semibold mb-1">Username Instagram</label>
-                    <input type="text" name="username_ig" class="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#BDB5A4]" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold mb-1">Link Story Instagram</label>
-                    <input type="url" name="link_story" class="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#BDB5A4]">
+                    <input type="text" name="username_ig" required class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-[#BDB5A4]">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold mb-1">Nomor WhatsApp</label>
-                    <input type="text" name="no_whatsapp" class="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#BDB5A4]" required>
+                    <input type="text" name="no_whatsapp" required class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-[#BDB5A4]">
                 </div>
-                <div>
-                    <label class="block text-sm font-semibold mb-1">Upload Screenshot Story (opsional)</label>
-                    <input type="file" name="foto_story" accept="image/*" class="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-[#BDB5A4]">
-                </div>
-
                 <button type="submit" class="bg-[#BDB5A4] text-white px-6 py-3 rounded w-full font-semibold hover:bg-[#a79c8d] transition">Kirim Pesanan</button>
             </form>
+
         </div>
     </section>
 

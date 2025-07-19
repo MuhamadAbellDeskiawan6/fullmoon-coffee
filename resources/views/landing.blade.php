@@ -52,9 +52,10 @@
             }
         </style>
 
+
         <div class="max-w-xl mx-auto px-4 relative z-10">
             <h1 class="text-5xl md:text-6xl font-bold mb-4">Nikmati Kopi Gratismu</h1>
-            <p class="mb-6 text-lg">Buat story kata-kata tentang bulan dan tag <span class="font-semibold">@fullmoon</span> untuk menikmati kopi spesial kami hari ini.</p>
+            <p class="mb-6 text-lg">Isi form dengan lengkap dan dapatkan kopi gratis untuk 5 orang tercepat setiap harinya!</p>
             <a href="/order" class="inline-flex items-center bg-white text-[#BDB5A4] px-6 py-3 rounded shadow font-semibold hover:bg-gray-100 transition">
                 Pesan Sekarang
                 <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

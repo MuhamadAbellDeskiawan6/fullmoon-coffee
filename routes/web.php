@@ -8,6 +8,10 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\MenuController;
 
+// ✅ Tambahkan route limit di luar middleware
+Route::get('/limit', function () {
+    return view('limit');
+});
 
 Route::get('/', [LandingController::class, 'index']);
 Route::get('/order', [OrderController::class, 'create']);
@@ -33,4 +37,5 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/admin/menus', [AdminController::class, 'menus']);
     Route::post('/admin/menus/add', [AdminController::class, 'addMenu']);
     Route::delete('/admin/menus/{id}', [AdminController::class, 'deleteMenu']);
+    
 });
