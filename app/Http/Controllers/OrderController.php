@@ -29,45 +29,57 @@ class OrderController extends Controller
     {
         $request->validate([
             'nama_pemesan' => 'required',
-            'no_whatsapp' => 'required',
             'menu_id' => 'required',
-            'username_ig' => 'required',
+            'setuju_feedback' => 'required',
+            'lokasi' => 'required',
         ]);
 
-        // Format nomor WA
-        $no_wa = preg_replace('/[^0-9]/', '', $request->no_whatsapp);
-        if (substr($no_wa, 0, 1) == '0') {
-            $no_wa = '62' . substr($no_wa, 1);
+        if (!$request->username_ig && !$request->no_whatsapp) {
+            return redirect()->back()->with('error', 'Minimal isi Instagram atau WhatsApp.');
         }
 
-        // Cek apakah user dengan no_whatsapp ini sudah pernah order hari ini
-        $existingOrder = Order::where('no_whatsapp', $no_wa)
-            ->whereDate('created_at', Carbon::today())
-            ->first();
+        // Format nomor WA jika diisi
+        $no_wa = null;
+        if ($request->no_whatsapp) {
+            $no_wa = preg_replace('/[^0-9]/', '', $request->no_whatsapp);
+            if (substr($no_wa, 0, 1) == '0') {
+                $no_wa = '62' . substr($no_wa, 1);
+            }
+        }
 
+        // Cek apakah user sudah pernah order hari ini (bisa pakai WA atau IG)
+        $existingOrderQuery = Order::whereDate('created_at', Carbon::today());
+        if ($no_wa) {
+            $existingOrderQuery->where('no_whatsapp', $no_wa);
+        } elseif ($request->username_ig) {
+            $existingOrderQuery->where('username_ig', $request->username_ig);
+        }
+
+        $existingOrder = $existingOrderQuery->first();
         if ($existingOrder) {
-            return redirect()->back()->with('error', 'Anda sudah melakukan pemesanan hari ini.');
+            return redirect()->back()->with('error', 'Anda sudah mendaftar sebagai tester hari ini.');
         }
 
-        // Cek kuota order yang disetujui hari ini
+        // Cek kuota
         $approvedCountToday = Order::whereDate('created_at', Carbon::today())
             ->where('status', 'approved')
             ->count();
 
         if ($approvedCountToday >= 5) {
-            return redirect()->back()->with('error', 'Maaf, kuota pemesanan kopi gratis hari ini sudah penuh. Silakan coba besok.');
+            return redirect()->back()->with('error', 'Maaf, kuota tester hari ini penuh. Coba lagi besok.');
         }
 
-        // Simpan order dengan status 'pending'
+        // Simpan order
         $order = Order::create([
             'nama_pemesan' => $request->nama_pemesan,
             'menu_id' => $request->menu_id,
             'username_ig' => $request->username_ig,
             'no_whatsapp' => $no_wa,
+            'lokasi' => $request->lokasi,
             'status' => 'pending',
         ]);
 
-        // Kirim email notifikasi ke admin
+        // Kirim email notifikasi ke admin (tetap)
         Mail::to('muhamadabelldeskiawan@gmail.com')->send(new OrderNotification($order));
 
         $request->session()->put('order_success', true);

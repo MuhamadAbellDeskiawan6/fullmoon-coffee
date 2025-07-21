@@ -21,31 +21,30 @@
             <thead>
                 <tr class="bg-[#BDB5A4] text-white">
                     <th class="py-2 px-4 text-left">Nama</th>
+                    <th class="py-2 px-4 text-left">Lokasi</th>
                     <th class="py-2 px-4 text-left">Menu</th>
                     <th class="py-2 px-4 text-left">Username IG</th>
-                    <th class="py-2 px-4 text-left">Link Story</th>
                     <th class="py-2 px-4 text-left">No WA</th>
                     <th class="py-2 px-4 text-left">Kontak</th>
                     <th class="py-2 px-4 text-left">Status</th>
                     <th class="py-2 px-4 text-left">Aksi</th>
                 </tr>
             </thead>
+
             <tbody>
                 @foreach($orders as $order)
                 <tr class="border-b">
                     <td class="py-2 px-4">{{ $order->nama_pemesan }}</td>
+                    <td class="py-2 px-4">{{ $order->lokasi }}</td>
                     <td class="py-2 px-4">{{ $order->menu->nama }}</td>
-                    <td class="py-2 px-4">{{ $order->username_ig }}</td>
+                    <td class="py-2 px-4">{{ $order->username_ig ?? '-' }}</td>
+                    <td class="py-2 px-4">{{ $order->no_whatsapp ?? '-' }}</td>
                     <td class="py-2 px-4">
-                        @if($order->link_story)
-                        <a href="{{ $order->link_story }}" target="_blank" class="text-blue-500">Link</a>
+                        @if($order->no_whatsapp)
+                        <a href="https://wa.me/{{ $order->no_whatsapp }}?text=Halo%20{{ urlencode($order->nama_pemesan) }},%20terima%20kasih%20sudah%20ikut%20tester%20Fullmoon%20Coffee." target="_blank" class="bg-green-500 text-white px-3 py-1 rounded">Chat WA</a>
                         @else
-                        -
+                        <span class="text-gray-400">Tidak ada WA</span>
                         @endif
-                    </td>
-                    <td class="py-2 px-4">{{ $order->no_whatsapp }}</td>
-                    <td class="py-2 px-4">
-                        <a href="https://wa.me/{{ $order->no_whatsapp }}?text=Halo%20{{ urlencode($order->nama_pemesan) }},%20terima%20kasih%20atas%20pemesanan%20kopi%20Fullmoon%20anda." target="_blank" class="bg-green-500 text-white px-3 py-1 rounded">Chat WA</a>
                     </td>
                     <td class="py-2 px-4">
                         @php
@@ -77,6 +76,7 @@
                 </tr>
                 @endforeach
             </tbody>
+
         </table>
         <!-- Pagination links -->
         <div class="mt-6">

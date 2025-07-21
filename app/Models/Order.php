@@ -14,9 +14,9 @@ class Order extends Model
         'nama_pemesan',
         'menu_id',
         'username_ig',
-        'link_story',
         'no_whatsapp',
-        'foto_story',
+        'lokasi',
+        'feedback_agreement',
         'status',
     ];
 

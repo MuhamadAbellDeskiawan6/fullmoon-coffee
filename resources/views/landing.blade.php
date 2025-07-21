@@ -9,6 +9,21 @@
 </head>
 
 <body class="bg-[#F8F8F8] text-gray-800">
+
+
+    <audio id="bg-music" loop>
+        <source src="/music/fullmoon.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung audio.
+    </audio>
+
+    <!-- Button play music -->
+    <!-- Button play music -->
+    <button onclick="document.getElementById('bg-music').play()" class="fixed bottom-4 right-4 bg-white text-[#BDB5A4] rounded-full p-3 shadow-lg hover:bg-gray-100 transition z-50 block md:block">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M5 9v6h4l5 5V4l-5 5H5z" />
+        </svg>
+    </button>
+
     <!-- Navbar -->
     <header class="bg-gradient-to-b from-[#BDB5A4] to-[#a79c8d] shadow sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -16,7 +31,7 @@
                 <img src="/images/fullmoon.png" class="h-10" alt="Fullmoon Logo" />
                 <span class="font-bold text-white text-xl">Fullmoon Coffee</span>
             </div>
-            <a href="/order" class="bg-white text-[#BDB5A4] px-4 py-2 rounded shadow font-semibold hover:bg-gray-100 transition">Pesan Gratis</a>
+            <a href="/order" class="bg-white text-[#BDB5A4] px-4 py-2 rounded shadow font-semibold hover:bg-gray-100 transition">Jadi Tester</a>
         </div>
     </header>
 
@@ -54,10 +69,10 @@
 
 
         <div class="max-w-xl mx-auto px-4 relative z-10">
-            <h1 class="text-5xl md:text-6xl font-bold mb-4">Nikmati Kopi Gratismu</h1>
+            <h1 class="text-5xl md:text-6xl font-bold mb-4">Ikutan jadi Tim Tester Kopi Kami!</h1>
             <p class="mb-6 text-lg">Isi form dengan lengkap dan dapatkan kopi gratis untuk 5 orang tercepat setiap harinya!</p>
             <a href="/order" class="inline-flex items-center bg-white text-[#BDB5A4] px-6 py-3 rounded shadow font-semibold hover:bg-gray-100 transition">
-                Pesan Sekarang
+                Ikutan Jadi Tester
                 <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L13.586 11H4a1 1 0 110-2h9.586l-3.293-3.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                 </svg>

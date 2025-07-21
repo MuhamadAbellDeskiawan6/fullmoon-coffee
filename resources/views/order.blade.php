@@ -22,9 +22,11 @@
     </header>
 
     <!-- Form Section -->
+    <!-- Form Section -->
     <section class="container mx-auto px-4 py-16">
         <div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
-            <h1 class="text-3xl font-bold text-center mb-8 text-[#BDB5A4]">Form Pemesanan Kopi Gratis</h1>
+            <h1 class="text-3xl font-bold text-center mb-2 text-[#BDB5A4]">Ikutan jadi Tim Tester Rasa Kopi Baru Kami!</h1>
+            <p class="text-center mb-8">Dapatkan kopi gratis</p>
 
             @if(session('error'))
             <div class="bg-red-100 text-red-700 p-4 rounded mb-6 text-center">{{ session('error') }}</div>
@@ -33,8 +35,20 @@
             <form action="/order" method="POST" enctype="multipart/form-data" class="space-y-5">
                 @csrf
                 <div>
-                    <label class="block text-sm font-semibold mb-1">Nama Lengkap</label>
+                    <label class="block text-sm font-semibold mb-1">Nama (boleh samaran)</label>
                     <input type="text" name="nama_pemesan" required class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-[#BDB5A4]">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Lokasi (cth: Jakarta Barat, Bandung)</label>
+                    <input type="text" name="lokasi" required class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-[#BDB5A4]">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Username Instagram (opsional)</label>
+                    <input type="text" name="username_ig" class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-[#BDB5A4]">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Nomor WhatsApp (opsional)</label>
+                    <input type="text" name="no_whatsapp" class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-[#BDB5A4]">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold mb-1">Pilih Menu Kopi</label>
@@ -44,19 +58,16 @@
                         @endforeach
                     </select>
                 </div>
-                <div>
-                    <label class="block text-sm font-semibold mb-1">Username Instagram</label>
-                    <input type="text" name="username_ig" required class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-[#BDB5A4]">
+                <div class="flex items-center">
+                    <input type="checkbox" name="setuju_feedback" required class="mr-2">
+                    <label class="text-sm">Saya bersedia kasih feedback jujur setelah nyobain</label>
                 </div>
-                <div>
-                    <label class="block text-sm font-semibold mb-1">Nomor WhatsApp</label>
-                    <input type="text" name="no_whatsapp" required class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-[#BDB5A4]">
-                </div>
-                <button type="submit" class="bg-[#BDB5A4] text-white px-6 py-3 rounded w-full font-semibold hover:bg-[#a79c8d] transition">Kirim Pesanan</button>
+                <button type="submit" class="bg-[#BDB5A4] text-white px-6 py-3 rounded w-full font-semibold hover:bg-[#a79c8d] transition">Kirim Form Tester</button>
             </form>
 
         </div>
     </section>
+
 
     <!-- Footer -->
     <footer class="bg-[#BDB5A4] text-white py-6 mt-12">
