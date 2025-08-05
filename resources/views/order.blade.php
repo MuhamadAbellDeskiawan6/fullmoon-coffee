@@ -26,7 +26,7 @@
     <section class="container mx-auto px-4 py-16">
         <div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
             <h1 class="text-3xl font-bold text-center mb-2 text-[#BDB5A4]">Ikutan jadi Tim Tester Rasa Kopi Baru Kami!</h1>
-            <p class="text-center mb-8">Dapatkan kopi gratis</p>
+
 
             @if(session('error'))
             <div class="bg-red-100 text-red-700 p-4 rounded mb-6 text-center">{{ session('error') }}</div>
@@ -39,7 +39,7 @@
                     <input type="text" name="nama_pemesan" required class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-[#BDB5A4]">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold mb-1">Lokasi (cth: Jakarta Barat, Bandung)</label>
+                    <label class="block text-sm font-semibold mb-1">Alamat (cth: Jl Kelayan A, Jl Gatot Subroto)</label>
                     <input type="text" name="lokasi" required class="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-[#BDB5A4]">
                 </div>
                 <div>

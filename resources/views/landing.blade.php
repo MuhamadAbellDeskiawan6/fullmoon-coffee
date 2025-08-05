@@ -6,6 +6,8 @@
     <title>Fullmoon Coffee</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
 </head>
 
 <body class="bg-[#F8F8F8] text-gray-800">
@@ -79,6 +81,33 @@
             </a>
         </div>
     </section>
+    <!-- Photobooth Section -->
+    <div class="text-center mt-10">
+        <h2 id="frameTitle" class="text-3xl font-bold mb-6">Frame Fullmoon</h2>
+        <button id="enableCameraBtn" class="bg-[#BDB5A4] text-white px-6 py-3 rounded shadow hover:bg-[#a79c8d] transition">
+            Aktifkan Kamera
+        </button>
+    </div>
+
+    <div id="photobooth" class="hidden">
+        <section class="container mx-auto px-4 py-16 text-center">
+            <h2 class="text-3xl font-bold mb-6">Frame Fullmoon</h2>
+
+            <!-- Video preview -->
+            <div class="relative inline-block w-[270px] h-[480px] md:w-[360px] md:h-[640px] bg-black rounded-lg overflow-hidden">
+                <video id="video" autoplay playsinline class="w-full h-full object-cover"></video>
+                <img id="captured-photo" class="absolute top-0 left-0 w-full h-full object-cover hidden" alt="Captured Photo">
+                <img src="/images/fullmoon-frame.png" class="absolute top-0 left-0 w-full h-full object-cover pointer-events-none" alt="Fullmoon Frame">
+            </div>
+
+            <div class="mt-4 flex justify-center space-x-2">
+                <button id="captureButton" onclick="takePhoto()" class="bg-[#BDB5A4] text-white px-4 py-2 rounded shadow hover:bg-[#a79c8d] transition">Ambil Foto</button>
+                <button id="retakeButton" onclick="retakePhoto()" class="hidden bg-yellow-500 text-white px-4 py-2 rounded shadow hover:bg-yellow-600 transition">Ambil Ulang</button>
+                <button id="switchButton" onclick="switchCamera()" class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition">Ganti Kamera</button>
+                <a id="downloadLink" class="hidden bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 transition" download="fullmoon-story.png">Download Foto</a>
+            </div>
+        </section>
+    </div>
 
     <!-- Menu Section -->
     <section class="container mx-auto px-4 py-16">
@@ -115,6 +144,119 @@
     <footer class="bg-[#BDB5A4] text-white py-8 mt-12">
         <div class="text-center text-sm">&copy; 2025 Fullmoon Coffee | IG: @fullmooncoffe.id</div>
     </footer>
+    <script>
+        const video = document.getElementById('video');
+        const capturedPhoto = document.getElementById('captured-photo');
+        const downloadLink = document.getElementById('downloadLink');
+        const retakeButton = document.getElementById('retakeButton');
+        const captureButton = document.getElementById('captureButton');
+
+        let stream = null;
+        let currentCamera = "user"; // default depan
+
+        // Fungsi untuk mulai kamera
+        function startCamera(facingMode) {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+
+            navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: facingMode
+                    }
+                })
+                .then(s => {
+                    stream = s;
+                    video.srcObject = stream;
+                    video.classList.remove('hidden');
+                    capturedPhoto.classList.add('hidden');
+                    downloadLink.classList.add('hidden');
+                    retakeButton.classList.add('hidden');
+                    captureButton.classList.remove('hidden');
+                })
+                .catch(err => {
+                    console.log("Error accessing camera: ", err);
+                    alert("Tidak dapat mengakses kamera. Pastikan izin kamera aktif.");
+                });
+        }
+
+        function takePhoto() {
+            const canvas = document.createElement('canvas');
+
+            // Ambil proporsi video asli untuk mencegah stretch
+            const videoAspectRatio = video.videoWidth / video.videoHeight;
+            canvas.width = 1080;
+            canvas.height = 1920;
+
+            const ctx = canvas.getContext('2d');
+
+            // Hitung posisi agar crop center tanpa stretch
+            const desiredAspect = canvas.width / canvas.height;
+            let sx, sy, sw, sh;
+
+            if (videoAspectRatio > desiredAspect) {
+                // Video lebih lebar
+                sh = video.videoHeight;
+                sw = sh * desiredAspect;
+                sx = (video.videoWidth - sw) / 2;
+                sy = 0;
+            } else {
+                // Video lebih tinggi
+                sw = video.videoWidth;
+                sh = sw / desiredAspect;
+                sx = 0;
+                sy = (video.videoHeight - sh) / 2;
+            }
+
+            ctx.drawImage(video, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+
+            // Draw frame overlay
+            const frame = new Image();
+            frame.src = '/images/fullmoon-frame.png';
+            frame.onload = () => {
+                ctx.drawImage(frame, 0, 0, canvas.width, canvas.height);
+
+                // Show captured photo preview
+                const dataURL = canvas.toDataURL('image/png');
+                capturedPhoto.src = dataURL;
+                capturedPhoto.classList.remove('hidden');
+                video.classList.add('hidden');
+
+                // Enable download & retake button
+                downloadLink.href = dataURL;
+                downloadLink.classList.remove('hidden');
+                retakeButton.classList.remove('hidden');
+                captureButton.classList.add('hidden');
+            };
+        }
+
+        function retakePhoto() {
+            capturedPhoto.classList.add('hidden');
+            video.classList.remove('hidden');
+            downloadLink.classList.add('hidden');
+            retakeButton.classList.add('hidden');
+            captureButton.classList.remove('hidden');
+        }
+
+        function switchCamera() {
+            currentCamera = (currentCamera === "user") ? "environment" : "user";
+            startCamera(currentCamera);
+        }
+        const enableCameraBtn = document.getElementById('enableCameraBtn');
+        const photoboothSection = document.getElementById('photobooth');
+
+        enableCameraBtn.addEventListener('click', () => {
+            // Tampilkan photobooth
+            photoboothSection.classList.remove('hidden');
+            enableCameraBtn.classList.add('hidden');
+
+            // Sembunyikan judul di atas tombol
+            document.getElementById('frameTitle').classList.add('hidden');
+
+            // Mulai kamera
+            startCamera(currentCamera);
+        });
+    </script>
 </body>
 
 </html>
