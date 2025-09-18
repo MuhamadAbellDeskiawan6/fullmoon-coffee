@@ -11,16 +11,15 @@ class Order extends Model
 
     // Izinkan mass assignment
     protected $fillable = [
-        'nama_pemesan',
         'menu_id',
-        'username_ig',
-        'no_whatsapp',
-        'lokasi',
-        'feedback_agreement',
+        'jumlah',
+        'payment',
         'status',
+        'preferensi_rasa',
+        'feedback_consent',
+        'feedback_agreement',
     ];
 
-    // Jika ada relasi menu
     public function menu()
     {
         return $this->belongsTo(Menu::class);

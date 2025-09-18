@@ -10,5 +10,5 @@ class Menu extends Model
     use HasFactory;
 
     // Izinkan mass assignment pada kolom berikut
-    protected $fillable = ['nama', 'deskripsi', 'foto'];
+    protected $fillable = ['nama', 'deskripsi', 'foto', 'harga'];
 }

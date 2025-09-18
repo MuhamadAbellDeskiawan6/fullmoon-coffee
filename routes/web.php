@@ -3,39 +3,67 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 
-// ✅ Tambahkan route limit di luar middleware
+// ============================
+// Public Routes
+// ============================
+
+// Landing page
+Route::get('/', [LandingController::class, 'index'])->name('landing');
+
+// Order page
+Route::get('/order', [OrderController::class, 'create'])->name('order.create');
+Route::post('/order', [OrderController::class, 'store'])->name('order.store');
+
+// Payment pages
+Route::get('/payment/qris/{id}', [OrderController::class, 'qris'])->name('payment.qris');
+Route::get('/payment/cash/{id}', [OrderController::class, 'cash'])->name('payment.cash');
+
+// Order limit page
 Route::get('/limit', function () {
     return view('limit');
-});
+})->name('order.limit');
 
-Route::get('/', [LandingController::class, 'index']);
-Route::get('/order', [OrderController::class, 'create']);
-Route::post('/order', [OrderController::class, 'store']);
-Route::get('/success', [OrderController::class, 'success']);
-Route::get('/admin/menus/{id}/edit', [MenuController::class, 'edit']);
-Route::put('/admin/menus/{id}/update', [MenuController::class, 'update']);
+// Success page
+Route::get('/success', [OrderController::class, 'success'])->name('order.success');
 
 
-// 🔐 Admin Login Routes (tidak perlu middleware admin.auth)
+// ============================
+// Admin Authentication Routes
+// ============================
+
+// Show login form
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+// Handle login
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
-Route::get('/admin/logout', [AdminAuthController::class, 'logout']);
+// Logout
+Route::get('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
-// 🔒 Admin Protected Routes
+
+// ============================
+// Admin Protected Routes
+// ============================
 Route::middleware('admin.auth')->group(function () {
-    Route::get('/admin', [DashboardController::class, 'index']);
 
-    // Order Management
-    Route::post('/admin/order/{id}/status', [AdminController::class, 'updateStatus']);
+    // Dashboard
+    Route::get('/admin', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    // Menu Management
-    Route::get('/admin/menus', [AdminController::class, 'menus']);
-    Route::post('/admin/menus/add', [AdminController::class, 'addMenu']);
-    Route::delete('/admin/menus/{id}', [AdminController::class, 'deleteMenu']);
-    
+    // ============================
+    // Admin Menu Management
+    // ============================
+    Route::get('/admin/menus', [MenuController::class, 'index'])->name('admin.menus');
+    Route::post('/admin/menus/add', [MenuController::class, 'store'])->name('admin.menus.add');
+    Route::get('/admin/menus/{id}/edit', [MenuController::class, 'edit'])->name('admin.menus.edit');
+    Route::put('/admin/menus/{id}/update', [MenuController::class, 'update'])->name('admin.menus.update');
+    Route::delete('/admin/menus/{id}', [MenuController::class, 'destroy'])->name('admin.menus.delete');
+
+    // ============================
+    // Admin Order Management
+    // ============================
+    Route::get('/admin/orders', [AdminOrderController::class, 'index'])->name('admin.orders');
+    Route::post('/admin/orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
 });

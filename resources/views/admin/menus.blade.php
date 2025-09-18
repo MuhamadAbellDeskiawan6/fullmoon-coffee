@@ -28,6 +28,11 @@
                 <textarea name="deskripsi" class="w-full border px-3 py-2 rounded"></textarea>
             </div>
             <div class="mb-4">
+                <label class="block font-semibold mb-1">Harga (Rp)</label>
+                <input type="number" name="harga" value="0" min="0" class="w-full border px-3 py-2 rounded" required>
+            </div>
+
+            <div class="mb-4">
                 <label class="block font-semibold mb-1">Foto</label>
                 <input type="file" name="foto" accept="image/*" class="w-full border px-3 py-2 rounded">
             </div>
@@ -39,6 +44,7 @@
                 <tr class="bg-[#BDB5A4] text-white">
                     <th class="py-2 px-4 text-left">Nama</th>
                     <th class="py-2 px-4 text-left">Deskripsi</th>
+                    <th class="py-2 px-4 text-left">Harga (Rp)</th>
                     <th class="py-2 px-4 text-left">Foto</th>
                     <th class="py-2 px-4 text-left">Aksi</th>
                 </tr>
@@ -48,6 +54,7 @@
                 <tr class="border-b">
                     <td class="py-2 px-4">{{ $menu->nama }}</td>
                     <td class="py-2 px-4">{{ $menu->deskripsi }}</td>
+                    <td class="py-2 px-4">Rp{{ number_format($menu->harga) }}</td>
                     <td class="py-2 px-4">
                         @if($menu->foto)
                         <img src="{{ asset('storage/'.$menu->foto) }}" alt="{{ $menu->nama }}" class="w-16 h-16 object-cover rounded">
@@ -67,6 +74,7 @@
                         </div>
                     </td>
 
+
                 </tr>
                 @endforeach
             </tbody>
@@ -76,6 +84,7 @@
             <a href="/admin" class="bg-[#BDB5A4] text-white px-4 py-2 rounded">Kembali ke Dashboard</a>
         </div>
     </div>
+
 
 </body>
 

@@ -56,7 +56,7 @@
                 <img src="/images/fullmoon.png" class="h-10" alt="Fullmoon Logo" />
                 <span class="font-bold text-white text-xl">Fullmoon Coffee</span>
             </div>
-            <a href="/order" class="bg-white text-[#BDB5A4] px-4 py-2 rounded shadow font-semibold hover:bg-gray-100 transition">Jadi Tester</a>
+            <a href="/order" class="bg-white text-[#BDB5A4] px-4 py-2 rounded shadow font-semibold hover:bg-gray-100 transition">Pesan Sekarang</a>
         </div>
     </header>
 
@@ -94,10 +94,10 @@
 
 
         <div class="max-w-xl mx-auto px-4 relative z-10">
-            <h1 class="text-5xl md:text-6xl font-bold mb-4">Ikutan jadi Tim Tester Kopi Kami!</h1>
-            <p class="mb-6 text-lg">Isi form dengan lengkap dan dapatkan kopi gratis untuk 5 orang tercepat setiap harinya!</p>
+            <h1 class="text-5xl md:text-6xl font-bold mb-4">Nikmati Kopi Ala Fullmoon!</h1>
+            <p class="mb-6 text-lg">Rasakan pengalaman baru menikmati kopi dengan sentuhan magis dari Fullmoon Coffee!</p>
             <a href="/order" class="inline-flex items-center bg-white text-[#BDB5A4] px-6 py-3 rounded shadow font-semibold hover:bg-gray-100 transition">
-                Ikutan Jadi Tester
+                Pesan Sekarang
                 <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L13.586 11H4a1 1 0 110-2h9.586l-3.293-3.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                 </svg>
@@ -142,6 +142,7 @@
                 <div class="p-4">
                     <h3 class="text-xl font-bold mb-2">{{ $menu->nama }}</h3>
                     <p class="text-gray-600 text-sm">{{ $menu->deskripsi }}</p>
+                    <p class="text-lg font-semibold mt-2">Rp{{ number_format($menu->harga) }}</p>
                 </div>
             </div>
             @endforeach

@@ -29,6 +29,10 @@
                 <textarea name="deskripsi" class="w-full border px-3 py-2 rounded">{{ $menu->deskripsi }}</textarea>
             </div>
             <div class="mb-4">
+                <label class="block font-semibold mb-1">Harga (Rp)</label>
+                <input type="number" name="harga" value="{{ $menu->harga }}" min="0" class="w-full border px-3 py-2 rounded" required>  
+            </div>
+            <div class="mb-4">
                 <label class="block font-semibold mb-1">Foto (biarkan kosong jika tidak diubah)</label>
                 <input type="file" name="foto" accept="image/*" class="w-full border px-3 py-2 rounded">
                 @if($menu->foto)

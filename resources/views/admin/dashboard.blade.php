@@ -20,12 +20,9 @@
         <table class="min-w-full bg-white rounded shadow">
             <thead>
                 <tr class="bg-[#BDB5A4] text-white">
-                    <th class="py-2 px-4 text-left">Nama</th>
-                    <th class="py-2 px-4 text-left">Lokasi</th>
                     <th class="py-2 px-4 text-left">Menu</th>
-                    <th class="py-2 px-4 text-left">Username IG</th>
-                    <th class="py-2 px-4 text-left">No WA</th>
-                    <th class="py-2 px-4 text-left">Kontak</th>
+                    <th class="py-2 px-4 text-left">Jumlah</th>
+                    <th class="px-4 py-2">Pembayaran</th>
                     <th class="py-2 px-4 text-left">Status</th>
                     <th class="py-2 px-4 text-left">Aksi</th>
                 </tr>
@@ -34,40 +31,28 @@
             <tbody>
                 @foreach($orders as $order)
                 <tr class="border-b">
-                    <td class="py-2 px-4">{{ $order->nama_pemesan }}</td>
-                    <td class="py-2 px-4">{{ $order->lokasi }}</td>
                     <td class="py-2 px-4">{{ $order->menu->nama }}</td>
-                    <td class="py-2 px-4">{{ $order->username_ig ?? '-' }}</td>
-                    <td class="py-2 px-4">{{ $order->no_whatsapp ?? '-' }}</td>
-                    <td class="py-2 px-4">
-                        @if($order->no_whatsapp)
-                        <a href="https://wa.me/{{ $order->no_whatsapp }}?text=Halo%20{{ urlencode($order->nama_pemesan) }},%20terima%20kasih%20sudah%20ikut%20tester%20Fullmoon%20Coffee." target="_blank" class="bg-green-500 text-white px-3 py-1 rounded">Chat WA</a>
-                        @else
-                        <span class="text-gray-400">Tidak ada WA</span>
-                        @endif
-                    </td>
+                    <td class="py-2 px-4">{{ $order->jumlah }}</td>
+                    <td class="px-4 py-2">{{ ucfirst($order->payment) }}</td>
                     <td class="py-2 px-4">
                         @php
                         $statusColors = [
-                        'pending' => 'text-yellow-600',
-                        'approved' => 'text-blue-600',
-                        'done' => 'text-green-600',
-                        'rejected' => 'text-red-600',
+                        'menunggu' => 'text-yellow-600',
+                        'diproses' => 'text-blue-600',
+                        'selesai' => 'text-green-600',
                         ];
                         @endphp
                         <span class="{{ $statusColors[$order->status] ?? 'text-gray-800' }}">
                             {{ ucfirst($order->status) }}
                         </span>
                     </td>
-
                     <td class="py-2 px-4">
                         <form action="/admin/order/{{ $order->id }}/status" method="POST" class="inline-block">
                             @csrf
                             <select name="status" class="border rounded px-2 py-1">
-                                <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="approved" {{ $order->status == 'approved' ? 'selected' : '' }}>Approved</option>
-                                <option value="done" {{ $order->status == 'done' ? 'selected' : '' }}>Done</option>
-                                <option value="rejected" {{ $order->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                                <option value="menunggu" {{ $order->status == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
+                                <option value="diproses" {{ $order->status == 'diproses' ? 'selected' : '' }}>Diproses</option>
+                                <option value="selesai" {{ $order->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
                             </select>
 
                             <button type="submit" class="ml-2 bg-[#BDB5A4] text-white px-3 py-1 rounded">Update</button>
@@ -76,8 +61,8 @@
                 </tr>
                 @endforeach
             </tbody>
-
         </table>
+
         <!-- Pagination links -->
         <div class="mt-6">
             {{ $orders->links('pagination::tailwind') }}
@@ -87,6 +72,8 @@
             <a href="/admin/menus" class="bg-[#BDB5A4] text-white px-4 py-2 rounded">Kelola Menu</a>
         </div>
     </div>
+
+
 
 </body>
 
