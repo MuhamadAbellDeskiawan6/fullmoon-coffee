@@ -41,19 +41,19 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'menu_id' => 'required|exists:menus,id',
-            'jumlah'  => 'required|integer|min:1',
-            'payment' => 'required|in:qris,cash',
+            'nama_pemesan' => 'required|string|max:255',
+            'menu_id'      => 'required|exists:menus,id',
+            'jumlah'       => 'required|integer|min:1',
+            'payment'      => 'required|in:qris,cash',
         ]);
 
         $order = Order::create([
-            'menu_id' => $request->menu_id,
-            'jumlah'  => $request->jumlah,
-            'payment' => $request->payment,
-            'status'  => 'menunggu',
+            'nama_pemesan' => $request->nama_pemesan,
+            'menu_id'      => $request->menu_id,
+            'jumlah'       => $request->jumlah,
+            'payment'      => $request->payment,
+            'status'       => 'menunggu',
         ]);
-
-
 
         if ($request->payment === 'qris') {
             return redirect()->route('payment.qris', $order->id);
@@ -61,6 +61,7 @@ class OrderController extends Controller
             return redirect()->route('payment.cash', $order->id);
         }
     }
+
     public function qris($id)
     {
         $order = Order::findOrFail($id);
@@ -70,34 +71,48 @@ class OrderController extends Controller
     public function cash($id)
     {
         $order = Order::findOrFail($id);
+
+        // Simpan order ID di session untuk digunakan pada halaman success
+        session(['last_order_id' => $order->id]);
+
         return view('payment.cash', compact('order'));
     }
+
 
     public function success(Request $request)
     {
         $method = $request->get('method', 'cash'); // default cash
 
-        // Ambil order terakhir jika perlu
+        // Ambil order terakhir dari session
         $order = null;
         if ($request->session()->has('last_order_id')) {
             $order = Order::find($request->session()->get('last_order_id'));
         }
 
+        // Jika order tidak ditemukan atau ID tidak valid, bisa lakukan redirect atau error handling
+        if (!$order) {
+            return redirect()->route('landing')->with('error', 'Transaksi tidak ditemukan.');
+        }
+
         return view('success', compact('order', 'method'));
     }
+
     public function qrisDone($id)
     {
+        // Cari order berdasarkan ID
         $order = Order::findOrFail($id);
 
-        // Update status menjadi diproses
-        $order->update([
-            'status' => 'diproses'
-        ]);
+        // Pastikan statusnya belum 'diproses' sebelum kita ubah menjadi 'diproses'
+        if ($order->status !== 'diproses') {
+            $order->update([
+                'status' => 'diproses'  // Ubah status jadi 'diproses'
+            ]);
+        }
 
-        // Simpan order terakhir di session supaya success bisa akses
+        // Simpan order ID di session untuk digunakan pada halaman success
         session(['last_order_id' => $order->id]);
 
-        // Redirect ke halaman success dengan method qris
+        // Redirect ke halaman success dengan metode qris
         return redirect()->route('order.success', ['method' => 'qris']);
     }
 }

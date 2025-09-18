@@ -22,6 +22,11 @@
             <p class="text-center text-gray-600 mb-4">Setelah pembayaran berhasil, klik tombol selesai dibawah</p>
 
             <div class="text-center mb-4">
+                <span class="font-semibold">Atas Nama:</span>
+                <span class="text-gray-800 font-mono">{{ $order->nama_pemesan }}</span>
+            </div>
+            
+            <div class="text-center mb-4">
                 <span class="font-semibold">ID Transaksi:</span>
                 <span class="text-gray-800 font-mono">{{ $order->id }}</span>
             </div>

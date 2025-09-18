@@ -30,6 +30,11 @@
             <form action="{{ route('order.store') }}" method="POST" class="space-y-5">
                 @csrf
                 <div>
+                    <label class="block mb-1 font-semibold">Atas Nama</label>
+                    <input type="text" name="nama_pemesan" required placeholder="Nama Anda" class="w-full border px-3 py-2 rounded">
+                </div>
+
+                <div>
                     <label class="block mb-1 font-semibold">Pilih Menu</label>
                     <select name="menu_id" class="w-full border px-3 py-2 rounded">
                         @foreach($menus as $menu)

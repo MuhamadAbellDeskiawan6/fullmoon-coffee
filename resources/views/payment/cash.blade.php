@@ -21,7 +21,11 @@
         <div class="bg-white shadow-md rounded-lg p-6">
             <p class="mb-4">Silakan lakukan pembayaran secara tunai di kasir.</p>
             <p class="text-gray-600">Pesanan Anda akan diproses setelah pembayaran selesai.</p>
-
+            
+            <div class="mt-4">
+                <span class="font-semibold">Atas Nama:</span>
+                <span class="text-gray-800 font-mono">{{ $order->nama_pemesan }}</span>
+            </div>
             <div class="mt-4">
                 <span class="font-semibold">ID Transaksi:</span>
                 <span class="text-gray-800 font-mono">{{ $order->id }}</span>

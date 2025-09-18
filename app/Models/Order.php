@@ -12,6 +12,7 @@ class Order extends Model
     // Izinkan mass assignment
     protected $fillable = [
         'menu_id',
+        'nama_pemesan',
         'jumlah',
         'payment',
         'status',

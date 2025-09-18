@@ -16,6 +16,9 @@
         <p class="mb-4">
             Pesananmu telah kami terima
         </p>
+        <p class="mb-2 font-semibold">Atas Nama: {{ $order?->nama_pemesan ?? 'Tidak Diketahui' }}</p>
+        <p class="mb-4 font-semibold">ID Transaksi: {{ $order?->id ?? '-' }}</p>
+
 
         @if($method === 'cash')
         <p class="mb-6 font-semibold">Silakan bayar di kasir.</p>
