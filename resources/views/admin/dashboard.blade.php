@@ -20,6 +20,7 @@
         <table class="min-w-full bg-white rounded shadow">
             <thead>
                 <tr class="bg-[#BDB5A4] text-white">
+                    <th class="py-2 px-4 text-left">ID</th>
                     <th class="py-2 px-4 text-left">Menu</th>
                     <th class="py-2 px-4 text-left">Jumlah</th>
                     <th class="px-4 py-2">Pembayaran</th>
@@ -31,6 +32,7 @@
             <tbody>
                 @foreach($orders as $order)
                 <tr class="border-b">
+                    <td class="py-2 px-4">{{ $order->id }}</td>
                     <td class="py-2 px-4">{{ $order->menu->nama }}</td>
                     <td class="py-2 px-4">{{ $order->jumlah }}</td>
                     <td class="px-4 py-2">{{ ucfirst($order->payment) }}</td>
@@ -47,14 +49,13 @@
                         </span>
                     </td>
                     <td class="py-2 px-4">
-                        <form action="/admin/order/{{ $order->id }}/status" method="POST" class="inline-block">
+                        <form action="{{ route('admin.orders.updateStatus', $order->id) }}" method="POST" class="inline-block">
                             @csrf
                             <select name="status" class="border rounded px-2 py-1">
                                 <option value="menunggu" {{ $order->status == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
                                 <option value="diproses" {{ $order->status == 'diproses' ? 'selected' : '' }}>Diproses</option>
                                 <option value="selesai" {{ $order->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
                             </select>
-
                             <button type="submit" class="ml-2 bg-[#BDB5A4] text-white px-3 py-1 rounded">Update</button>
                         </form>
                     </td>

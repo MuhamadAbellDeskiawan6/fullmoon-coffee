@@ -25,6 +25,19 @@ class OrderController extends Controller
         return view('order', compact('menus'));
     }
 
+    public function updateStatus(Request $request, Order $order)
+    {
+        $request->validate([
+            'status' => 'required|in:menunggu,diproses,selesai',
+        ]);
+        $order->update(['status' => $request->status]);
+
+        // Kirim email notifikasi
+        Mail::to('admin@example.com')->send(new OrderNotification($order));
+
+        return redirect()->back()->with('success', 'Status order berhasil diupdate.');
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -40,7 +53,7 @@ class OrderController extends Controller
             'status'  => 'menunggu',
         ]);
 
-        
+
 
         if ($request->payment === 'qris') {
             return redirect()->route('payment.qris', $order->id);
@@ -60,12 +73,9 @@ class OrderController extends Controller
         return view('payment.cash', compact('order'));
     }
 
-
     public function success(Request $request)
     {
-        if (!$request->session()->has('order_success')) {
-            return redirect('/order');
-        }
+        $method = $request->get('method', 'cash'); // default cash
 
         // Ambil order terakhir jika perlu
         $order = null;
@@ -73,10 +83,21 @@ class OrderController extends Controller
             $order = Order::find($request->session()->get('last_order_id'));
         }
 
-        // Hapus flag agar tidak bisa refresh ulang
-        $request->session()->forget('order_success');
-        $request->session()->forget('last_order_id');
+        return view('success', compact('order', 'method'));
+    }
+    public function qrisDone($id)
+    {
+        $order = Order::findOrFail($id);
 
-        return view('success', compact('order'));
+        // Update status menjadi diproses
+        $order->update([
+            'status' => 'diproses'
+        ]);
+
+        // Simpan order terakhir di session supaya success bisa akses
+        session(['last_order_id' => $order->id]);
+
+        // Redirect ke halaman success dengan method qris
+        return redirect()->route('order.success', ['method' => 'qris']);
     }
 }

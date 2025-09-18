@@ -31,6 +31,9 @@ Route::get('/limit', function () {
 // Success page
 Route::get('/success', [OrderController::class, 'success'])->name('order.success');
 
+// Route untuk update status QRIS
+Route::post('/payment/qris/{id}/done', [OrderController::class, 'qrisDone'])->name('payment.qris.done');
+
 
 // ============================
 // Admin Authentication Routes
@@ -64,6 +67,6 @@ Route::middleware('admin.auth')->group(function () {
     // ============================
     // Admin Order Management
     // ============================
-    Route::get('/admin/orders', [AdminOrderController::class, 'index'])->name('admin.orders');
-    Route::post('/admin/orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+    Route::get('/admin/order', [AdminOrderController::class, 'index'])->name('admin.orders');
+    Route::post('/admin/order/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
 });
