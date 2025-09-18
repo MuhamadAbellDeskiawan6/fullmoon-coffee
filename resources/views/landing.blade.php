@@ -12,19 +12,42 @@
 
 <body class="bg-[#F8F8F8] text-gray-800">
 
-
+    <!-- Background Music -->
     <audio id="bg-music" loop>
         <source src="/music/fullmoon.mp3" type="audio/mpeg">
-        Browser Anda tidak mendukung audio.
+        Browser kamu tidak mendukung audio.
     </audio>
 
-    <!-- Button play music -->
-    <!-- Button play music -->
-    <button onclick="document.getElementById('bg-music').play()" class="fixed bottom-4 right-4 bg-white text-[#BDB5A4] rounded-full p-3 shadow-lg hover:bg-gray-100 transition z-50 block md:block">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M5 9v6h4l5 5V4l-5 5H5z" />
-        </svg>
-    </button>
+    <!-- Music Player Floating Bottom -->
+    <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 
+            bg-white text-[#BDB5A4] shadow-lg rounded-2xl px-4 py-3 
+            flex items-center space-x-3 w-[280px] z-50">
+
+        <!-- Play / Pause Button -->
+        <button id="toggleMusic" onclick="toggleMusic()"
+            class="p-2 rounded-full bg-[#BDB5A4] text-white">
+            <svg id="playIcon" xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M5 9v6h4l5 5V4l-5 5H5z" />
+            </svg>
+            <svg id="pauseIcon" xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 hidden" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+            </svg>
+        </button>
+
+        <!-- Song Info -->
+        <div class="flex-1">
+            <p class="text-sm font-semibold">Fullmoon Coffee</p>
+            <p class="text-xs text-gray-500">Background Music</p>
+        </div>
+
+        <!-- Duration / Progress bar (optional) -->
+        <div class="w-16 h-1 bg-gray-200 rounded-full overflow-hidden">
+            <div id="musicProgress" class="h-full bg-[#BDB5A4]" style="width: 0%;"></div>
+        </div>
+    </div>
+
 
     <!-- Navbar -->
     <header class="bg-gradient-to-b from-[#BDB5A4] to-[#a79c8d] shadow sticky top-0 z-50">
@@ -139,12 +162,80 @@
             </div>
         </div>
     </section>
+    <!-- AI Kopi Chat -->
+    <section class="bg-[#F3F3F3] py-12">
+        <div class="container mx-auto px-4 text-center max-w-lg">
+            <h2 class="text-2xl font-bold mb-4">Tanya AI Kopi</h2>
+            <p class="text-sm text-gray-600 mb-6">Tanya rekomendasi kopi sesuai selera kamu!</p>
+
+            <!-- Chat Box -->
+            <div id="chatBox" class="bg-white rounded-lg shadow p-4 h-64 overflow-y-auto text-left mb-4">
+                <div class="text-gray-500 text-sm">👋 Halo! Mau kopi yang segar, manis, atau strong?</div>
+            </div>
+
+            <!-- Input -->
+            <div class="flex">
+                <input id="userInput" type="text" placeholder="Contoh: Saya mau yang manis..."
+                    class="flex-1 border rounded-l-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#BDB5A4]" />
+                <button onclick="askCoffeeAI()"
+                    class="bg-[#BDB5A4] text-white px-4 rounded-r-lg hover:bg-[#a79c8d] transition">Tanya</button>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer class="bg-[#BDB5A4] text-white py-8 mt-12">
         <div class="text-center text-sm">&copy; 2025 Fullmoon Coffee | IG: @fullmooncoffe.id</div>
     </footer>
     <script>
+        const chatBox = document.getElementById('chatBox');
+        const userInput = document.getElementById('userInput');
+
+        // Daftar menu kopi sederhana
+        const coffeeMenus = [{
+                name: "Americano - Es",
+                type: ["strong", "pahit", "segar", "dingin"]
+            },
+            {
+                name: "Kopi Susu Gula Aren - Es",
+                type: ["manis", "creamy", "favorit", "gula"]
+            },
+            {
+                name: "Spanish Latte - Es",
+                type: ["manis", "rich", "lembut", "cream"]
+            },
+        ];
+
+        // Fungsi AI kopi
+        function askCoffeeAI() {
+            const question = userInput.value.trim().toLowerCase();
+            if (!question) return;
+
+            // Tampilkan pertanyaan user
+            addChat("🧑 Kamu", question);
+
+            // Cari jawaban
+            let answer = "Hmm, coba jelaskan lebih spesifik. Mau yang segar, manis, atau strong?";
+            for (let menu of coffeeMenus) {
+                if (menu.type.some(keyword => question.includes(keyword))) {
+                    answer = `☕ Rekomendasi untukmu: <b>${menu.name}</b>`;
+                    break;
+                }
+            }
+
+            // Tampilkan jawaban AI
+            setTimeout(() => addChat("🤖 AI Kopi", answer), 600);
+
+            userInput.value = "";
+        }
+
+        function addChat(sender, message) {
+            const div = document.createElement("div");
+            div.classList.add("mb-2");
+            div.innerHTML = `<span class="font-bold">${sender}:</span> <span class="text-gray-700">${message}</span>`;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
         const video = document.getElementById('video');
         const capturedPhoto = document.getElementById('captured-photo');
         const downloadLink = document.getElementById('downloadLink');
@@ -256,6 +347,28 @@
             // Mulai kamera
             startCamera(currentCamera);
         });
+        const music = document.getElementById('bg-music');
+        const progress = document.getElementById('musicProgress');
+
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+                document.getElementById("playIcon").classList.add("hidden");
+                document.getElementById("pauseIcon").classList.remove("hidden");
+            } else {
+                music.pause();
+                document.getElementById("playIcon").classList.remove("hidden");
+                document.getElementById("pauseIcon").classList.add("hidden");
+            }
+        }
+
+        // Update progress bar
+        music.ontimeupdate = () => {
+            if (music.duration) {
+                let percent = (music.currentTime / music.duration) * 100;
+                progress.style.width = percent + "%";
+            }
+        };
     </script>
 </body>
 
